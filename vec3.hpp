@@ -114,6 +114,7 @@ inline vec3 cross(const vec3 &v1, const vec3 &v2) {
                 (v1.e[0] * v2.e[1] - v1.e[1] * v2.e[0]));
 }
 
+//Vector3 += overload
 inline vec3& vec3::operator+=(const vec3 &v) {
     e[0] += v.e[0];
     e[1] += v.e[1];
@@ -121,18 +122,23 @@ inline vec3& vec3::operator+=(const vec3 &v) {
     return *this;
 }
 
+//Vector3 *= overload
 inline vec3& vec3::operator*=(const vec3 &v) {
     e[0] *= v.e[0];
     e[1] *= v.e[1];
     e[2] *= v.e[2];
     return *this;
 }
+
+//Vector3 /= overload
 inline vec3& vec3::operator/=(const vec3 &v) {
     e[0] /= v.e[0];
     e[1] /= v.e[1];
     e[2] /= v.e[2];
     return *this;
 }
+
+//Vector3 -= overload
 inline vec3& vec3::operator-=(const vec3 &v) {
     e[0] -= v.e[0];
     e[1] -= v.e[1];
