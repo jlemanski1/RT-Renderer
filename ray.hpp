@@ -1,8 +1,8 @@
 /*
     Ray class, the core of the ray tracer.
 */
-#ifndef RAYH
-#define RAYH
+#ifndef RAY
+#define RAY
 #include "vec3.hpp"
 
 class ray {
