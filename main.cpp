@@ -2,21 +2,7 @@
 #include "sphere.hpp"
 #include "hitable_list.hpp"
 #include "float.h"
-/*
-float hit_sphere(const vec3& center, float radius, const ray& r) {
-    vec3 oc = r.origin() - center;
-    float a = dot(r.direction(), r.direction());
-    float b = 2.0 * dot(oc, r.direction());
-    float c = dot(oc, oc) - radius * radius;
-    float disciminant = b * b - 4 * a * c;
-    if (disciminant < 0) {
-        return -1.0;
-    }else {
-        return (-b - sqrt(disciminant)) / (2.0 * a);
-    }
-}
-*/
-
+#include "camera.hpp"
 
 vec3 colour(const ray& r, hitable *world) {
     hit_record rec;
@@ -33,31 +19,30 @@ int main() {
     //Window Dimensions
     int nx = 200;
     int ny = 100;
+    int ns = 100;
 
     std::cout << "P3\n" << nx << " " << ny << "\n255\n";
-
-    //Vectors
-    vec3 lower_left_corner(-2.0, -1.0, -1.0);
-    vec3 horizontal(4.0, 0.0, 0.0);
-    vec3 vertical(0.0, 2.0, 0.0);
-    vec3 origin(0.0, 0.0, 0.0);
 
     //hitables
     hitable *list[2];
     list[0] = new sphere(vec3(0, 0, -1), 0.5);
     list[1] = new sphere(vec3(0, - 100.5, -1), 100);
     hitable *world = new hitable_list(list, 2);
+    camera cam;
 
     //Loop through pixels left to right
     for (int j = ny - 1; j >= 0; j--) {
         //Loop through pixels top to bottom
         for (int i = 0; i < nx; i++) {
-            float u = float(i) / float(nx);
-            float v = float(j) / float(ny);
-            ray r(origin, lower_left_corner + u * horizontal + v * vertical);
-            
-            vec3 p = r.point_at_parameter(2.0);
-            vec3 col = colour(r, world);
+            vec3 col(0, 0, 0);
+            for (int s = 0; s < ns; s++) {
+                float u = float(i + drand48()) / float(nx);
+                float v = float(j - drand48()) / float(ny);
+                ray r = cam.get_ray(u, v);
+                vec3 p = r.point_at_parameter(2.0);
+                col += colour(r, world);
+            }
+            col /= float(ns);
             int ir = int(255.99 * col[0]);  // Red
             int ig = int(255.99 * col[1]);  //Green
             int ib = int(255.99 * col[2]);  //Blue
